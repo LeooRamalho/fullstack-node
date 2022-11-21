@@ -1,21 +1,24 @@
-import * as express from "express"
-import * as bodyParser from "body-parser"
-import { Request, Response } from "express"
+import express from "express"
+import bodyParser from "body-parser"
+import cors from "cors"
 import { AppDataSource } from "./data-source"
 import routes from "./routes"
-import { User } from "./entity/User"
 
+//Initialize DB
 AppDataSource.initialize().then(async () => {
 
     // create express app
     const app = express()
     app.use(bodyParser.json())
 
+    app.use(cors())
     app.use(routes)
 
     // start express server
-    app.listen(3000)
+    app.listen(process.env.PORT || 3333, () => {
+        console.log("Servidor em Execução");
+    });
 
-    console.log("Express server has started on port 3000. Open http://localhost:3000/users to see results")
+    console.log("Express server has started on port 3333.")
 
 }).catch(error => console.log(error))
